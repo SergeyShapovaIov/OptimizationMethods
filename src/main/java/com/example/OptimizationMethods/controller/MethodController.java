@@ -5,6 +5,7 @@ import org.springframework.boot.context.properties.bind.Name;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,21 +25,17 @@ public class MethodController {
 
         double result = 0;
         boolean stopCreterion = false;
-
         while(!stopCreterion){
             double x1 = ((startingPoint + finishingPoint) / 2)  - constantDistinguishability;
             double x2 = ((startingPoint + finishingPoint) / 2)  + constantDistinguishability;
-
             double y1 = x1*x1 - 2*x1 +1;
             double y2 = x2*x2 - 2*x2 +1;
-
             if(y1 <= y2){
 
                 finishingPoint = x2;
             } else {
                 startingPoint = x1;
             }
-
             if(((finishingPoint - startingPoint)/2 ) < searchAccuracy){
                 result = (startingPoint + finishingPoint) /2 ;
                 stopCreterion = true;
@@ -47,14 +44,25 @@ public class MethodController {
         return result;
     }
 
-
     /*
     Формат записи функции следующий y = x^2 - 2 * x + 1
      */
     class Function{
-        Map<String, BigDecimal> dictionary = new HashMap<String, BigDecimal>();
 
+        /*
+        Ну типа конструктор
+         */
         public Function (String stringFunction) {
+
+        }
+        private final class GeneralInfo{
+            private int moduleCount;
+            private ArrayList<String> intermoduleOperators[];
+        }
+
+        private ArrayList<FunctionModule> modules;
+
+        private class FunctionModule {
 
         }
     }
