@@ -1,5 +1,7 @@
 package com.example.OptimizationMethods.controller;
 
+import com.example.OptimizationMethods.controller.MethodController.Function.FunctionModule.Info;
+import com.example.OptimizationMethods.controller.MethodController.Function.FunctionModule.Options;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
@@ -40,7 +42,6 @@ public class MethodController {
             double y1 = x1*x1 - 2*x1 +1;
             double y2 = x2*x2 - 2*x2 +1;
              */
-
             if(y1 <= y2){
                 finishingPoint = x2;
             } else {
@@ -58,15 +59,18 @@ public class MethodController {
     Формат записи функции следующий y = (x^2) - (2 * x) + (1)
      */
     public class Function {
-        public void Function (/*String stringFunction*/) {
+        public Function () {
+
             GeneralInfo generalInfo = new GeneralInfo();
             generalInfo.moduleCount = 3;
             generalInfo.intermoduleOperators = new ArrayList(Arrays.asList("-","+"));
-            modules = new ArrayList<>();
+            this.modules = new ArrayList<>();
             /*
             Создаем первый модуль
              */
                 FunctionModule functionModule_1 = new FunctionModule();
+                functionModule_1.info  = new Info();
+                functionModule_1.options = new Options();
                 functionModule_1.info.existenceVariable = true;
                 functionModule_1.info.notNull = true;
                 functionModule_1.info.trigonometricFunction = false;
@@ -74,23 +78,27 @@ public class MethodController {
                 functionModule_1.info.factorAvailability = true;
                 functionModule_1.options.trigonometric = null;
                 functionModule_1.options.exponentiation = 2;
-                functionModule_1.options.factor = 2;
+                functionModule_1.options.factor = 1;
                 /*
                 Создаем второй модуль
                  */
                 FunctionModule functionModule_2 = new FunctionModule();
+                functionModule_2.info  = new Info();
+                functionModule_2.options = new Options();
                 functionModule_2.info.existenceVariable = true;
                 functionModule_2.info.notNull = true;
                 functionModule_2.info.trigonometricFunction = false;
                 functionModule_2.info.exponentiation = false;
                 functionModule_2.info.factorAvailability = true;
                 functionModule_2.options.trigonometric = null;
-                functionModule_2.options.exponentiation = 2;
+                functionModule_2.options.exponentiation = 1;
                 functionModule_2.options.factor = 2;
                 /*
                 Создаем третий модуль
                  */
                 FunctionModule functionModule_3 = new FunctionModule();
+                functionModule_3.info  = new Info();
+                functionModule_3.options = new Options();
                 functionModule_3.info.existenceVariable = false;
                 functionModule_3.info.notNull = true;
                 functionModule_3.info.trigonometricFunction = false;
@@ -99,29 +107,45 @@ public class MethodController {
                 functionModule_3.options.trigonometric = null;
                 functionModule_3.options.exponentiation = 1;
 
-                modules.add(functionModule_1);
-                modules.add(functionModule_2);
-                modules.add(functionModule_3);
+                this.modules.add(functionModule_1);
+                this.modules.add(functionModule_2);
+                this.modules.add(functionModule_3);
+
         }
         public class GeneralInfo {
             public int moduleCount;
             public List<String> intermoduleOperators;
+
+            public GeneralInfo(){
+
+            }
         }
         public ArrayList<FunctionModule> modules;
         public class FunctionModule {
             public Info info;
             public Options options;
-            public class Info {
+            public FunctionModule(){
+
+            }
+            public static class Info {
                 public boolean existenceVariable;
                 public boolean notNull;
                 public boolean trigonometricFunction;
                 public boolean exponentiation;
                 public boolean factorAvailability;
+
+                public Info(){
+
+                }
             }
-            public class Options {
+            public static class Options {
                 public String trigonometric;
                 public double exponentiation;
                 public double factor;
+
+                public Options(){
+
+                }
             }
         }
 
