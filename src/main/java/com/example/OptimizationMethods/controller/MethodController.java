@@ -1,7 +1,9 @@
 package com.example.OptimizationMethods.controller;
 
+import com.example.OptimizationMethods.controller.MethodController.Function.FunctionModule;
 import com.example.OptimizationMethods.controller.MethodController.Function.FunctionModule.Info;
 import com.example.OptimizationMethods.controller.MethodController.Function.FunctionModule.Options;
+import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.List;
 import lombok.NonNull;
@@ -19,24 +21,21 @@ public class MethodController {
      Вот для этой функции считаем:  y = x^2 - 2 * x + 1
      */
 
-    @PostMapping("/halving1")
-    public double halving1 (@RequestParam @NonNull double searchAccuracy
+    @PostMapping("/halving")
+    public double halving (@RequestParam @NonNull String functionString
+            , @RequestParam @NonNull double searchAccuracy
             , @RequestParam @NonNull double constantDistinguishability
             , @RequestParam @NonNull double startingPoint
             , @RequestParam @NonNull double finishingPoint) {
-
+        functionString = functionDecoder(functionString);
         double result = 0;
         boolean stopCreterion = false;
-        Function function = new Function("y= (2*(x^2)) - (2*x) + (1)");
+        Function function = new Function(functionString);
         while(!stopCreterion){
             double x1 = ((startingPoint + finishingPoint) / 2)  - constantDistinguishability;
             double x2 = ((startingPoint + finishingPoint) / 2)  + constantDistinguishability;
             double y1 = function.calculateValueByParametr(x1);
             double y2 = function.calculateValueByParametr(x2);
-            /*
-            double y1 = x1*x1 - 2*x1 +1;
-            double y2 = x2*x2 - 2*x2 +1;
-             */
             if(y1 <= y2){
                 finishingPoint = x2;
             } else {
@@ -86,18 +85,21 @@ public class MethodController {
                 Info info = functionModule.info;
                 Options options = functionModule.options;
 
+                // existenceVariable
                 if(calculationModule.get(moduleNumber).contains("x")) {
                     info.existenceVariable = true;
                 } else {
                     info.existenceVariable = false;
                 }
 
+                // notNull
                 if(calculationModule.get(moduleNumber).isEmpty()) {
                     info.notNull = false;
                 } else {
                     info.notNull = true;
                 }
 
+                // trigonometricFunction
                 String[] trigonometricFunctionArray= {"sin","cos","tg","ctg"};
                 for(int i = 0; i<trigonometricFunctionArray.length; i++){
                     if(calculationModule.get(moduleNumber).contains(trigonometricFunctionArray[i])){
@@ -108,18 +110,21 @@ public class MethodController {
                     }
                 }
 
+                // exponent
                 if(calculationModule.get(moduleNumber).contains("^")){
-                    info.exponentiation = true;
+                    info.exponent = true;
                 } else {
-                    info.exponentiation = false;
+                    info.exponent = false;
                 }
 
+                // factorAvailability
                 if(calculationModule.get(moduleNumber).contains("*")){
                     info.factorAvailability = true;
                 } else {
                     info.factorAvailability  =false;
                 }
 
+                // values trigonometric
                 if(info.trigonometricFunction){
                     for(int i = 0; i < trigonometricFunctionArray.length; i++){
                         if(calculationModule.get(moduleNumber).contains(trigonometricFunctionArray[i])){
@@ -130,7 +135,7 @@ public class MethodController {
                     options.trigonometric = null;
                 }
 
-                if(info.exponentiation){
+                if(info.exponent){
                     options.exponentiation = Character.digit(
                             calculationModule.get(moduleNumber)
                             .charAt(calculationModule.get(moduleNumber).indexOf("^")+1)
@@ -150,55 +155,7 @@ public class MethodController {
 
 
                 this.modules.add(functionModule);
-
             }
-            /*
-                FunctionModule functionModule_1 = new FunctionModule();
-                functionModule_1.info  = new Info();
-                functionModule_1.options = new Options();
-                functionModule_1.info.existenceVariable = true;
-                functionModule_1.info.notNull = true;
-                functionModule_1.info.trigonometricFunction = false;
-                functionModule_1.info.exponentiation = true;
-                functionModule_1.info.factorAvailability = true;
-
-                functionModule_1.options.trigonometric = null;
-                functionModule_1.options.exponentiation = 2;
-                functionModule_1.options.factor = 1;
-                /*
-                Создаем второй модуль
-                 */
-                /*FunctionModule functionModule_2 = new FunctionModule();
-                functionModule_2.info  = new Info();
-                functionModule_2.options = new Options();
-                functionModule_2.info.existenceVariable = true;
-                functionModule_2.info.notNull = true;
-                functionModule_2.info.trigonometricFunction = false;
-                functionModule_2.info.exponentiation = false;
-                functionModule_2.info.factorAvailability = true;
-                functionModule_2.options.trigonometric = null;
-                functionModule_2.options.exponentiation = 1;
-                functionModule_2.options.factor = 2;
-                /*
-                Создаем третий модуль
-                 */
-                /*FunctionModule functionModule_3 = new FunctionModule();
-                functionModule_3.info  = new Info();
-                functionModule_3.options = new Options();
-                functionModule_3.info.existenceVariable = false;
-                functionModule_3.info.notNull = true;
-                functionModule_3.info.trigonometricFunction = false;
-                functionModule_3.info.exponentiation = false;
-                functionModule_3.info.factorAvailability = true;
-                functionModule_3.options.trigonometric = null;
-                functionModule_3.options.exponentiation = 1;
-
-                this.modules.add(functionModule_1);
-                this.modules.add(functionModule_2);
-                this.modules.add(functionModule_3);
-
-                 */
-
         }
         public class GeneralInfo {
 
@@ -246,10 +203,51 @@ public class MethodController {
 
             }
             public static class Info {
+
+                public boolean isExistenceVariable() {
+                    return this.existenceVariable;
+                }
+
+                public void setExistenceVariable(final boolean existenceVariable) {
+                    this.existenceVariable = existenceVariable;
+                }
+
+                public boolean isNotNull() {
+                    return this.notNull;
+                }
+
+                public void setNotNull(final boolean notNull) {
+                    this.notNull = notNull;
+                }
+
+                public boolean isTrigonometricFunction() {
+                    return this.trigonometricFunction;
+                }
+
+                public void setTrigonometricFunction(final boolean trigonometricFunction) {
+                    this.trigonometricFunction = trigonometricFunction;
+                }
+
+                public boolean isExponent() {
+                    return this.exponent;
+                }
+
+                public void setExponent(final boolean exponent) {
+                    this.exponent = exponent;
+                }
+
+                public boolean isFactorAvailability() {
+                    return this.factorAvailability;
+                }
+
+                public void setFactorAvailability(final boolean factorAvailability) {
+                    this.factorAvailability = factorAvailability;
+                }
+
                 public boolean existenceVariable;
                 public boolean notNull;
                 public boolean trigonometricFunction;
-                public boolean exponentiation;
+                public boolean exponent;
                 public boolean factorAvailability;
 
                 public Info(){
@@ -276,7 +274,7 @@ public class MethodController {
                 } else {
                     moduleResult = 1;
                 }
-                if(modules.get(i).info.exponentiation){
+                if(modules.get(i).info.exponent){
                     moduleResult = Math.pow(parametr, modules.get(i).options.exponentiation);
                 }
                 if(modules.get(i).info.factorAvailability){
@@ -294,5 +292,15 @@ public class MethodController {
             }
             return result;
         }
+    }
+
+    public String functionDecoder (String str){
+        String resultString;
+        if(str.contains("**")){
+            resultString = str.replace("**","^");
+        } else {
+            resultString = str;
+        }
+        return resultString;
     }
 }
