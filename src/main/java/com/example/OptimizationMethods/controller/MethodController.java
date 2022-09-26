@@ -7,6 +7,7 @@ import java.net.URLDecoder;
 import java.util.Arrays;
 import java.util.List;
 import lombok.NonNull;
+import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -16,6 +17,8 @@ import java.util.ArrayList;
 @RestController
 @RequestMapping("/method")
 public class MethodController {
+
+    private static final Logger log = Logger.getLogger(MethodController.class);
 
     /*
      Вот для этой функции считаем:  y = x^2 - 2 * x + 1
@@ -35,7 +38,11 @@ public class MethodController {
             double x1 = ((startingPoint + finishingPoint) / 2)  - constantDistinguishability;
             double x2 = ((startingPoint + finishingPoint) / 2)  + constantDistinguishability;
             double y1 = function.calculateValueByParametr(x1);
+            System.out.println("Input param :"  +x1 + "  Output param: " +y1);
+            log.info("Input param : " +x1 + ", Output param: " +y1);
             double y2 = function.calculateValueByParametr(x2);
+            System.out.println("Input param :"  +x2 + "   Output param: " +y2);
+            log.info("Input param : " +x2 + ", Output param: " +y2);
             if(y1 <= y2){
                 finishingPoint = x2;
             } else {
@@ -46,6 +53,7 @@ public class MethodController {
                 stopCreterion = true;
             }
         }
+        System.out.println("Finish");
         return result;
     }
 
@@ -280,15 +288,7 @@ public class MethodController {
                 if(modules.get(i).info.factorAvailability){
                     moduleResult = moduleResult * modules.get(i).options.factor;
                 }
-                if(i == 0){
-                    result = moduleResult;
-                }
-                if(i == 1){
-                    result -= moduleResult;
-                }
-                if(i== 2){
-                    result += moduleResult;
-                }
+
             }
             return result;
         }
