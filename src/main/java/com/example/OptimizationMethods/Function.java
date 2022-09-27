@@ -2,22 +2,19 @@ package com.example.OptimizationMethods;
 
 import com.example.OptimizationMethods.Function.FunctionModule.Info;
 import com.example.OptimizationMethods.Function.FunctionModule.Options;
-import com.example.OptimizationMethods.controller.MethodController;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import javax.sound.sampled.Line;
 
 public class Function {
+
   public Function (String functionString) {
     // Создаем объект с общей информацией для всех модулей
-    Function.GeneralInfo generalInfo = new Function.GeneralInfo();
-
+    this.generalInfo = new Function.GeneralInfo();
     // Создаем список с модулями функции
     ArrayList<String> functionModules = new ArrayList<String>(Arrays.asList(functionString.split(" ")));
     ArrayList<String> intermoduleOperatorsList = new ArrayList<>();
     ArrayList<String> calculationModule = new ArrayList<>();
-
     // Заполняем значение поля Info
     if(!functionModules.isEmpty()){
       if(functionModules.size() > 2){
@@ -32,33 +29,25 @@ public class Function {
     generalInfo.moduleCount = intermoduleOperatorsList.size();
     generalInfo.intermoduleOperators = intermoduleOperatorsList;
     this.modules = new ArrayList<>();
-            /*
-            Создаем первый модуль
-             */
-    for(int moduleNumber = 0; moduleNumber <= generalInfo.getModuleCount(); moduleNumber ++){
+
+    for(int moduleNumber = 0; moduleNumber <= generalInfo.getModuleCount(); moduleNumber ++) {
       Function.FunctionModule functionModule = new Function.FunctionModule();
       functionModule.info = new Info();
       functionModule.options = new Options();
-
       Function.FunctionModule.Info info = functionModule.info;
       Options options = functionModule.options;
-
-
-
       // existenceVariable
       if(calculationModule.get(moduleNumber).contains("x")) {
         info.existenceVariable = true;
       } else {
         info.existenceVariable = false;
       }
-
       // notNull
       if(calculationModule.get(moduleNumber).isEmpty()) {
         info.notNull = false;
       } else {
         info.notNull = true;
       }
-
       // trigonometricFunction
       String[] trigonometricFunctionArray= {"sin","cos","tg","ctg"};
       for(int i = 0; i<trigonometricFunctionArray.length; i++){
@@ -69,21 +58,18 @@ public class Function {
           info.trigonometricFunction = false;
         }
       }
-
       // exponent
       if(calculationModule.get(moduleNumber).contains("^")){
         info.exponent = true;
       } else {
         info.exponent = false;
       }
-
       // factorAvailability
       if(calculationModule.get(moduleNumber).contains("*")){
         info.factorAvailability = true;
       } else {
         info.factorAvailability  =false;
       }
-
       // values trigonometric
       if(info.trigonometricFunction){
         for(int i = 0; i < trigonometricFunctionArray.length; i++){
@@ -94,7 +80,6 @@ public class Function {
       } else {
         options.trigonometric = null;
       }
-
       if(info.exponent){
         options.exponentiation = Character.digit(
             calculationModule.get(moduleNumber)
@@ -103,7 +88,6 @@ public class Function {
       } else {
         options.exponentiation = 1;
       }
-
       if(info.factorAvailability){
         options.factor =  Character.digit(
             calculationModule.get(moduleNumber)
@@ -112,115 +96,93 @@ public class Function {
       } else {
         options.factor = 1;
       }
-
-
       this.modules.add(functionModule);
     }
   }
   public class GeneralInfo {
-
     public int getModuleCount() {
       return this.moduleCount;
     }
-
     public void setModuleCount(final int moduleCount) {
       this.moduleCount = moduleCount;
     }
-
     public List<String> getIntermoduleOperators() {
       return this.intermoduleOperators;
     }
-
     public void setIntermoduleOperators(final List<String> intermoduleOperators) {
       this.intermoduleOperators = intermoduleOperators;
     }
-
     public int moduleCount;
     public List<String> intermoduleOperators;
-
-    public GeneralInfo(){
-
-    }
-
-
-
+    public GeneralInfo() {}
   }
-
   public ArrayList<FunctionModule> getModules() {
     return this.modules;
   }
-
   public void setModules(
       final ArrayList<Function.FunctionModule> modules) {
     this.modules = modules;
   }
-
   public ArrayList<FunctionModule> modules;
+
+  public GeneralInfo getGeneralInfo() {
+    return this.generalInfo;
+  }
+
+  public void setGeneralInfo(final GeneralInfo generalInfo) {
+    this.generalInfo = generalInfo;
+  }
+
+  public GeneralInfo generalInfo;
   public class FunctionModule {
     public Function.FunctionModule.Info info;
     public Function.FunctionModule.Options options;
     public FunctionModule(){
-
     }
     public static class Info {
-
       public boolean isExistenceVariable() {
         return this.existenceVariable;
       }
-
       public void setExistenceVariable(final boolean existenceVariable) {
         this.existenceVariable = existenceVariable;
       }
-
       public boolean isNotNull() {
         return this.notNull;
       }
-
       public void setNotNull(final boolean notNull) {
         this.notNull = notNull;
       }
-
       public boolean isTrigonometricFunction() {
         return this.trigonometricFunction;
       }
-
       public void setTrigonometricFunction(final boolean trigonometricFunction) {
         this.trigonometricFunction = trigonometricFunction;
       }
-
       public boolean isExponent() {
         return this.exponent;
       }
-
       public void setExponent(final boolean exponent) {
         this.exponent = exponent;
       }
-
       public boolean isFactorAvailability() {
         return this.factorAvailability;
       }
-
       public void setFactorAvailability(final boolean factorAvailability) {
         this.factorAvailability = factorAvailability;
       }
-
       public boolean existenceVariable;
       public boolean notNull;
       public boolean trigonometricFunction;
       public boolean exponent;
       public boolean factorAvailability;
-
       public Info(){
-
       }
     }
     public static class Options {
       public String trigonometric;
       public double exponentiation;
       public double factor;
-
       public Options(){
-
       }
     }
   }
@@ -243,11 +205,15 @@ public class Function {
       if(i == 0){
         result = moduleResult;
       }
-      if(i == 1){
-        result -= moduleResult;
-      }
-      if(i== 2){
-        result += moduleResult;
+      if(i>0){
+          String operator = generalInfo.intermoduleOperators.get(i-1);
+          switch (operator){
+            case("+") :
+              result += moduleResult;
+              break;
+            case ("-") :
+              result -= moduleResult;
+          }
       }
     }
     return result;

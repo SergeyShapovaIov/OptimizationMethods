@@ -23,18 +23,14 @@ public class MethodController {
         , @RequestParam @NonNull double startPosition
         , @RequestParam @NonNull double step) {
 
-
         functionString = functionDecoder(functionString);
-
         Map<String,String> paramsDSC = new HashMap<String, String>();
         paramsDSC.put("functionString", functionString);
         paramsDSC.put("startPosition", String.valueOf(startPosition));
         paramsDSC.put("step",String.valueOf(step));
-
         double segmentList[] = DSC(paramsDSC);
         double startingPoint = segmentList[0];
         double finishingPoint = segmentList[1];
-
         double result = 0;
         boolean stopCreterion = false;
         Function function = new Function(functionString);
@@ -42,9 +38,7 @@ public class MethodController {
             double x1 = ((startingPoint + finishingPoint) / 2) - constantDistinguishability;
             double x2 = ((startingPoint + finishingPoint) / 2) + constantDistinguishability;
             double y1 = function.calculateValueByParametr(x1);
-            System.out.println("Input param :" + x1 + "  Output param: " + y1);
             double y2 = function.calculateValueByParametr(x2);
-            System.out.println("Input param :" + x2 + "   Output param: " + y2);
             if (y1 <= y2) {
                 finishingPoint = x2;
             } else {
@@ -55,7 +49,6 @@ public class MethodController {
                 stopCreterion = true;
             }
         }
-        System.out.println("Finish");
         return result;
     }
 
@@ -69,9 +62,7 @@ public class MethodController {
         return resultString;
     }
 
-
     private double[] DSC(Map<String,String> paramsDSC) {
-
         String functionString = paramsDSC.get("functionString");
         double startPosition = Double.valueOf(paramsDSC.get("startPosition"));
         double step = Double.valueOf(paramsDSC.get("step"));
@@ -128,7 +119,6 @@ public class MethodController {
                 counter++;
             }
         } while (y2 > y1);
-
         return segmentLimits;
     }
 }
