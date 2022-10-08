@@ -1,0 +1,20 @@
+<div id="wrapper">
+  <div id="container">
+      <div id="column1">
+          <div id="input-container">
+            <div id="label-container">
+              <h1>Формула</h1>
+            </div>
+            <div id="input-formula-wrapper">
+              <input id="input-formula" type="text">
+            </div>
+          </div>
+          <div id="template-container" [ngClass]="{'extension' : 'true'}">
+            <h1>Шаблонные формулы</h1>
+            <img (click)="showTemplates()" src="https://cdn-icons-png.flaticon.com/512/8233/8233964.png" alt="">
+          </div>
+      </div>
+      <div id="column2">
+      </div>
+  </div>
+</div>
