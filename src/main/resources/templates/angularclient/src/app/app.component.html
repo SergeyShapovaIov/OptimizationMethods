@@ -1,13 +1,19 @@
-<div id="wrapper">
+
+<!-- <div id="wrapper">
   <div id="container">
       <div id="column1">
-          <div id="input-container">
-            <div id="label-container">
+          <div id="input-function-container">
+            <div id="label-function-container">
               <h1>Формула</h1>
             </div>
-            <div id="input-formula-wrapper">
-              <input id="input-formula" type="text">
+            <div id=""  >
+              <h1>Начальная точка</h1>
             </div>
+            <div id="input-function-wrapper">
+              <input id="in Шаблонные формулы
+              put-function" type="text">
+            </div>
+            
           </div>
           <div id="template-container" [ngClass]="{'extension' : 'true'}">
             <h1>Шаблонные формулы</h1>
@@ -17,4 +23,34 @@
       <div id="column2">
       </div>
   </div>
+</div>*/ -->
+<div class="container text-center" id="container">
+    <div class="row">
+        <div class="col" id="col-1">
+          <div class="input-group input-group-lg">
+            <span class="input-group-text" id="inputGroup-sizing-lg">Формула</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+          </div>
+          <div class="input-group input-group-lg" id="start-position-input">
+            <span class="input-group-text" id="inputGroup-sizing-lg">Начальная точка</span>
+            <input type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-lg">
+          </div>
+          <div class="dropdown" id="dropdown-function">
+            <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Шаблонные функции
+            </button>
+            <ul class="dropdown-menu dropdown-menu-dark">
+              <li><a class="dropdown-item" (click)="substituteFormul()">y= (x-1)^2</a></li>
+              <li><a class="dropdown-item">y= 4*x^3 - 8*x^2 - 11*x + 5</a></li>
+              <li><a class="dropdown-item">y= x + 3/x^2</a></li>
+              <li><a class="dropdown-item">y= (x + 2.5)/(4 - x^2)</a></li>
+              <li><a class="dropdown-item">y= -sin(x) - (sin(3x)/3) </a></li>
+              <li><a class="dropdown-item">y= -2*sin(x) - sin(2*x) - (2*sin(3*x)/3)</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col" id="col-2">
+            <h1>Col 2</h1>
+        </div>
+    </div>
 </div>
